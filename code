@@ -1,0 +1,84 @@
+package com.qt.sele.scripts;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class Assign_fitpeo {
+	WebDriver driver;
+	JavascriptExecutor jse;
+	Actions actobj;
+	//Launching the chrome browser
+	public void Launchaut() throws InterruptedException {
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\dasar\\Downloads\\chromedriver-win64 (2)\\chromedriver-win64\\chromedriver.exe");
+		driver=new ChromeDriver();
+		driver.get("https://www.fitpeo.com/");
+		driver.manage().window().maximize();
+		Thread.sleep(1000);	
+		}
+	public void Navigation() throws InterruptedException{
+		jse = (JavascriptExecutor)driver;
+		//I used actions to open revenue calculator
+		WebElement Revenue = driver.findElement(By.xpath("//div[text() = 'Revenue Calculator']"));
+		jse.executeScript("arguments[0].click();",Revenue);
+		Thread.sleep(5000);
+		//by using actions scroll down to the slider
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0, 500);");
+        Thread.sleep(2000);
+        //moving the slider to desired value
+        //Due to some bug or feature desired value changes automatically
+		WebElement sliderEl=driver.findElement(By.cssSelector("span.MuiSlider-thumb"));
+	       Point point=sliderEl.getLocation();
+	       Actions action=new Actions(driver);
+	      action.dragAndDropBy(sliderEl,94,0).perform();
+	      Thread.sleep(5000);
+
+		    //later i have enter the desired  value in the text field
+	      WebElement textFieldEl=driver.findElement(By.cssSelector("input[type='number']"));
+	        js.executeScript("arguments[0].value='560'",textFieldEl);
+	        
+	        Thread.sleep(5000);
+	        //Select CPT Codes:
+	        //Scroll down further and select the checkboxes for CPT-99091, CPT-99453, CPT-99454, and CPT-99474.
+	        driver.findElement(By.xpath("//input[@type = 'checkbox']")).click();
+	        Thread.sleep(2000);
+	        driver.findElement(By.xpath("//span[text() ='19.19']")).click();
+	        Thread.sleep(2000);
+	        driver.findElement(By.xpath("//span[text() ='63']")).click();
+	        Thread.sleep(2000);
+	        jse.executeScript("window.scrollBy(0,400);");
+	        Thread.sleep(2000);
+	        driver.findElement(By.xpath("//span[text() ='15']")).click();
+	        
+	        
+	        Thread.sleep(2000);
+	       
+	        WebElement totalRecurringReimbursement=driver.findElement(By.cssSelector("div.css-m1khva>p:nth-of-type(2)"));
+	        String total= totalRecurringReimbursement.getText();
+	        String expecectedTotal="$110700";
+	        if(total.equals(expecectedTotal)){
+	            System.out.println(true);
+	        }else{
+	            System.out.println(false);
+	        }
+	        
+		
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
+		Assign_fitpeo obj=new Assign_fitpeo();
+		obj.Launchaut();
+		obj.Navigation();
+		
+	}
+		
+		
+	}
+	
+
+
